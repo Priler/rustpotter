@@ -226,8 +226,8 @@ fn it_can_detect_wakewords_using_trained_model() {
     assert_eq!(detected_wakewords[0].counter, 34);
     assert_eq!(detected_wakewords[0].avg_score, 0.);
     assert_eq!(detected_wakewords[0].score, 0.9997649);
-    assert_eq!(detected_wakewords[0].scores["ok_casa"], 3.7506533);
-    assert_eq!(detected_wakewords[0].scores["none"], -16.83091);
+    assert_eq!(detected_wakewords[0].scores["ok_casa"], 3.750659);
+    assert_eq!(detected_wakewords[0].scores["none"], -16.830908);
 }
 
 #[test]
@@ -243,8 +243,8 @@ fn it_can_detect_wakewords_using_trained_model_and_avg_score() {
     assert_eq!(detected_wakewords[0].counter, 34);
     assert_eq!(detected_wakewords[0].avg_score, 0.9997649);
     assert_eq!(detected_wakewords[0].score, 0.9997649);
-    assert_eq!(detected_wakewords[0].scores["ok_casa"], 3.7506533);
-    assert_eq!(detected_wakewords[0].scores["none"], -16.83091);
+    assert_eq!(detected_wakewords[0].scores["ok_casa"], 3.750659);
+    assert_eq!(detected_wakewords[0].scores["none"], -16.830908);
 }
 
 #[test]
@@ -263,7 +263,7 @@ fn it_can_detect_wakewords_in_eager_mode() {
     assert_eq!(detected_wakewords[0].avg_score, 0.);
     assert_eq!(detected_wakewords[0].score, 0.9992142);
     assert_eq!(detected_wakewords[0].scores["ok_casa"], 23.990948);
-    assert_eq!(detected_wakewords[0].scores["none"], 6.0654087);
+    assert_eq!(detected_wakewords[0].scores["none"], 6.065404);
 }
 #[test]
 fn it_can_remove_wakeword_by_key() {
