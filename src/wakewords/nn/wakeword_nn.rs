@@ -7,7 +7,34 @@ use crate::{
 };
 use candle_core::{DType, Device, Tensor, Var};
 use candle_nn::{Linear, Module, VarBuilder, VarMap};
-use std::{collections::HashMap, io::Cursor, str::FromStr};
+use std::{collections::HashMap, io::Cursor};
+
+/// Convert DType to string representation for serialization
+fn dtype_to_str(dtype: DType) -> String {
+    match dtype {
+        DType::U8 => "U8".to_string(),
+        DType::U32 => "U32".to_string(),
+        DType::I64 => "I64".to_string(),
+        DType::BF16 => "BF16".to_string(),
+        DType::F16 => "F16".to_string(),
+        DType::F32 => "F32".to_string(),
+        DType::F64 => "F64".to_string(),
+    }
+}
+
+/// Parse string to DType for deserialization
+fn str_to_dtype(s: &str) -> Option<DType> {
+    match s.to_uppercase().as_str() {
+        "U8" => Some(DType::U8),
+        "U32" => Some(DType::U32),
+        "I64" => Some(DType::I64),
+        "BF16" => Some(DType::BF16),
+        "F16" => Some(DType::F16),
+        "F32" => Some(DType::F32),
+        "F64" => Some(DType::F64),
+        _ => None,
+    }
+}
 
 pub(crate) struct WakewordNN {
     _var_map: VarMap,
@@ -233,11 +260,11 @@ pub(crate) fn get_tensors_data(var_map: VarMap) -> ModelWeights {
 impl From<&Var> for TensorData {
     fn from(tensor: &Var) -> Self {
         let mut w = Cursor::new(Vec::new());
-        let dims = tensor.shape().clone().into_dims();
+        let dims = tensor.dims().to_vec();
         tensor.write_bytes(&mut w).unwrap();
         TensorData {
             bytes: w.into_inner(),
-            d_type: tensor.dtype().as_str().to_string(),
+            d_type: dtype_to_str(tensor.dtype()),
             dims,
         }
     }
@@ -260,7 +287,7 @@ fn load_weights(
 
 impl From<&TensorData> for Tensor {
     fn from(val: &TensorData) -> Self {
-        let d_type = DType::from_str(&val.d_type).unwrap_or(DType::F32);
+        let d_type = str_to_dtype(&val.d_type).unwrap_or(DType::F32);
         Tensor::from_raw_buffer(&val.bytes, d_type, &val.dims, &Device::Cpu).unwrap()
     }
 }
