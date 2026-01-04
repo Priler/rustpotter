@@ -32,9 +32,9 @@ impl AudioEncoder {
         };
         self.reencode_to_mono_with_sample_rate(float_samples)
     }
-    pub fn rencode_and_resample<T: Sample>(&mut self, buffer: Vec<T>) -> Vec<f32> {
+    pub fn rencode_and_resample<T: Sample>(&mut self, buffer: &[T]) -> Vec<f32> {
         self.reencode_to_mono_with_sample_rate(
-            buffer.into_iter().map(T::into_f32).collect::<Vec<f32>>(),
+            buffer.iter().copied().map(T::into_f32).collect::<Vec<f32>>(),
         )
     }
     fn reencode_to_mono_with_sample_rate(&mut self, buffer: Vec<f32>) -> Vec<f32> {
@@ -172,7 +172,7 @@ fn reencode_wav_with_different_format() {
     .unwrap();
     samples
         .chunks_exact(encoder.get_input_frame_length())
-        .map(|chuck| encoder.rencode_and_resample::<i16>(chuck.to_vec()))
+        .map(|chunk| encoder.rencode_and_resample::<i16>(chunk))
         .for_each(|reencoded_chunk| {
             for sample in reencoded_chunk {
                 writer.write_sample(sample).ok();

@@ -244,7 +244,7 @@ impl Rustpotter {
     ///
     pub fn process_samples<T: Sample>(
         &mut self,
-        audio_samples: Vec<T>,
+        audio_samples: &[T],
     ) -> Option<RustpotterDetection> {
         if audio_samples.len() != self.get_samples_per_frame() {
             return None;

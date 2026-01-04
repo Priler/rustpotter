@@ -96,8 +96,8 @@ impl MfccExtractor {
             .collect()
     }
 
-    //==================================================================
-    // Feature extraction utils
+    // ### Feature extraction utils
+
     fn calculate_magnitude_spectrum(&self, audio_frame: &[f32]) -> Vec<f32> {
         let mut planner = FftPlanner::new();
         let fft = planner.plan_fft_forward(self.samples_per_frame);

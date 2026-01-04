@@ -79,7 +79,7 @@ fn encode_samples<R: std::io::Read, S: hound::Sample + Sample>(
         .collect::<Vec<_>>();
     samples
         .chunks_exact(encoder.get_input_frame_length())
-        .map(|chuck| encoder.rencode_and_resample::<S>(chuck.into()))
+        .map(|chunk| encoder.rencode_and_resample::<S>(chunk))
         .map(|encoded_buffer| {
             rms_levels.push(GainNormalizerFilter::get_rms_level(&encoded_buffer));
             encoded_buffer

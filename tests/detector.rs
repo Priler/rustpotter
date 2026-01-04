@@ -316,7 +316,7 @@ fn run_detection_with_audio_file(
     audio_samples.append(&mut silence);
     let detected_wakewords = audio_samples
         .chunks_exact(rustpotter.get_samples_per_frame())
-        .filter_map(|audio_buffer| rustpotter.process_samples(audio_buffer.into()))
+        .filter_map(|audio_buffer| rustpotter.process_samples(audio_buffer))
         .map(|detection| {
             print_detection(&detection);
             detection
@@ -426,10 +426,10 @@ fn read_wav_buffer(path: &str, gain: f32) -> Vec<u8> {
 }
 
 fn print_detection(detection: &rustpotter::RustpotterDetection) {
-    println!("-----=====-----");
+    println!("---");
     println!("Detection Score: {}", detection.score);
     println!("Avg Score: {}", detection.avg_score);
     println!("Scores: {:?}", detection.scores);
     println!("Partial detections: {}", detection.counter);
-    println!("_______________");
+    println!("---");
 }
